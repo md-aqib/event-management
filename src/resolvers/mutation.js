@@ -38,7 +38,25 @@ async function login(parent, args, context, info) {
   };
 }
 
+//add event
+function event(parent, args, context, info) {
+  const userId = getUserId(context);
+
+  const newLink = context.models.Event.create({
+    data: {
+      eventName: args.eventName,
+      eventDetails: args.eventDetails,
+      createdBy: args.createdBy,
+      date: args.date,
+      invite: { connect: { id: userId } },
+    },
+  });
+
+  return newLink;
+}
+
 module.exports = {
   register,
   login,
+  event,
 };

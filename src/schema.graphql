@@ -15,6 +15,7 @@ type Mutation {
     phone: Int
   ): AuthPayload
   login(email: String!, password: String!): AuthPayload
+  event(eventName: String!, eventDetails: String!, date: Date): Event!
 }
 
 type AuthPayload {
@@ -28,4 +29,13 @@ type Register {
   email: String!
   password: String!
   phone: Int!
+}
+
+type Event {
+  id: ID!
+  eventName: String!
+  eventDetails: String!
+  createdBy: Register!
+  date: Date
+  invite: [Register!]!
 }
