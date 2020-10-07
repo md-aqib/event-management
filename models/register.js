@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Register.init(
     {
       name: DataTypes.STRING,
-      phone: DataTypes.NUMBER,
+      phone: DataTypes.INTEGER,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
     },
