@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Event.init(
     {
+      event_id: {
+        type: DataTypes.UUID,
+        defaultValue: Model.UUIDV4, // Or Sequelize.UUIDV1
+      },
       eventName: DataTypes.STRING,
       eventDetails: DataTypes.STRING,
       createdBy: DataTypes.STRING,
