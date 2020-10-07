@@ -20,7 +20,9 @@ async function register(parent, args, context, info) {
 
 //login
 async function login(parent, args, context, info) {
-  const user = await context.models.Register.findAll();
+  const user = await context.models.Register.findOne({
+    where: { email: args.email },
+  });
   console.log(">>>>>>>>>>>>>>>", user);
   if (user === null) {
     throw new Error("No such user found");
@@ -34,6 +36,29 @@ async function login(parent, args, context, info) {
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
   return {
     token,
+    user,
+  };
+}
+
+//change password
+async function changepassword(parent, args, context, info) {
+  const userId = getUserId(context);
+  if (args.newPassword && args.oldPassword) {
+    throw new Error("Please enter all details");
+  }
+  const user = await context.models.Register.update(
+    { password: args.newPassword },
+    { where: { password: args.oldPassword } }
+  );
+  if (user === null) {
+    throw new Error("No such user found");
+  }
+
+  const valid = await bcrypt.compare(args.password, user.password);
+  if (!valid) {
+    throw new Error("Invalid password");
+  }
+  return {
     user,
   };
 }
@@ -58,5 +83,6 @@ function event(parent, args, context, info) {
 module.exports = {
   register,
   login,
+  changepassword,
   event,
 };

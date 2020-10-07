@@ -1,10 +1,6 @@
 type Query {
   info: String!
-  feed: Feed!
-}
-
-type Feed {
-  register: [Register!]!
+  feed: [Event!]!
 }
 
 type Mutation {
@@ -15,6 +11,7 @@ type Mutation {
     phone: Int
   ): AuthPayload
   login(email: String!, password: String!): AuthPayload
+  changepassword(newPassword: String!, oldPassword: !String)
   event(eventName: String!, eventDetails: String!, date: Date): Event!
 }
 
