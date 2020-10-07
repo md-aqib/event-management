@@ -22,7 +22,7 @@ type AuthPayload {
 }
 
 type Register {
-  user_id: ID!
+  user_id: Int!
   name: String!
   email: String!
   password: String!

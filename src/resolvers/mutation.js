@@ -22,7 +22,8 @@ async function register(parent, args, context, info) {
   const password = await bcrypt.hash(args.password, 10);
 
   // 2
-  const user = await context.models.Register.create({
+  console.log(args);
+  const user = await context.models.Registers.create({
     data: { ...args, password },
   });
 

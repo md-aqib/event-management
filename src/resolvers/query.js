@@ -1,7 +1,6 @@
 async function feed(parent, args, context, info) {
-  const register = await context.models.Register.findAll();
-
-  return register;
+  const registers = await context.models.Register.findAll();
+  return registers;
 }
 
 module.exports = {
