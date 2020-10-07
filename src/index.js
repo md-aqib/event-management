@@ -1,8 +1,12 @@
 const { GraphQLServer } = require("graphql-yoga");
-const register = require("./resolvers/register");
+const Query = require("./resolvers/Query");
+const Mutation = require("./resolvers/Mutation");
+const Register = require("./resolvers/Register");
 
 const resolvers = {
-  register,
+  Query,
+  Mutation,
+  Register,
 };
 
 const server = new GraphQLServer({

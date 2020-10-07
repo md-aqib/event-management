@@ -61,6 +61,6 @@ async function register(parent, args, context, info) {
 
 module.exports = {
   register,
-  login,
-  post,
+  //   login,
+  //   post,
 };

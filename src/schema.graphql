@@ -1,10 +1,19 @@
 type Query {
   info: String!
-  feed: [Register!]!
+  feed: Feed!
+}
+
+type Feed {
+  register: [Register!]!
 }
 
 type Mutation {
-  register(email: String!, password: String!, name: String!): AuthPayload
+  register(
+    email: String!
+    password: String!
+    name: String!
+    phone: Int
+  ): AuthPayload
 }
 
 type AuthPayload {
@@ -13,9 +22,9 @@ type AuthPayload {
 }
 
 type Register {
-  id: ID!
+  user_id: ID!
   name: String!
   email: String!
   password: String!
-  phone: String!
+  phone: Int!
 }
