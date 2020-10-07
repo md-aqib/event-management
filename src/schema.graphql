@@ -9,6 +9,7 @@ type Feed {
 
 type Mutation {
   register(
+    id: Int
     email: String!
     password: String!
     name: String!
@@ -22,7 +23,7 @@ type AuthPayload {
 }
 
 type Register {
-  user_id: Int!
+  id: Int
   name: String!
   email: String!
   password: String!

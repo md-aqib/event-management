@@ -13,14 +13,26 @@ module.exports = (sequelize, DataTypes) => {
   }
   Event.init(
     {
-      event_id: {
-        type: DataTypes.UUID,
-        defaultValue: Model.UUIDV4, // Or Sequelize.UUIDV1
+      eventName: {
+        type: DataTypes.STRING,
+        unique: {
+          args: true,
+          msg: "Event already created!",
+        },
       },
-      eventName: DataTypes.STRING,
       eventDetails: DataTypes.STRING,
       createdBy: DataTypes.STRING,
-      invited: DataTypes.ARRAY(DataTypes.STRING),
+      invited: DataTypes.ARRAY({
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isEmail: true,
+        },
+        unique: {
+          args: true,
+          msg: "Email address already invited!",
+        },
+      }),
       date: DataTypes.DATE,
     },
     {

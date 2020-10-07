@@ -13,13 +13,19 @@ module.exports = (sequelize, DataTypes) => {
   }
   Register.init(
     {
-      user_id: {
-        type: DataTypes.UUID,
-        defaultValue: Model.UUIDV4, // Or Sequelize.UUIDV1
-      },
       name: DataTypes.STRING,
       phone: DataTypes.INTEGER,
-      email: DataTypes.STRING,
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isEmail: true,
+        },
+        unique: {
+          args: true,
+          msg: "Email address already in use!",
+        },
+      },
       password: DataTypes.STRING,
     },
     {
