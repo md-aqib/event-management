@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Register.belongsToMany(models.Event);
     }
   }
   Register.init(
