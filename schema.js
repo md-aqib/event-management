@@ -6,6 +6,7 @@ const typeDefs = gql`
     events: [Event!]
     getMyEvent: [Event!]
     getSearchedEvent(searchQuery: String!): [Event!]
+    checkInvitation: [Event!]
   }
 
   type Mutation {

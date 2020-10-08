@@ -41,16 +41,27 @@ async function getSearchedEvent(parent, args, context, info) {
     }
     const data = await context.models.Event.findAll({
       where: {
-        title: { [Op.like]: "%" + searchQuery + "%" },
-        description: { [Op.like]: "%" + searchQuery2 + "%" },
+        eventName: { [Op.like]: "%" + searchQuery + "%" },
       },
     });
     return data;
   }
 }
 
+//checkinvitation
+async function checkInvitation(parent, args, context, info) {
+  const Auth = getUserId(context);
+  const data = await context.models.Event.findAll({
+    where: {
+      invited: { [Op.contains]: [Auth.email] },
+    },
+  });
+  return data;
+}
+
 module.exports = {
   events,
   getMyEvent,
   getSearchedEvent,
+  checkInvitation,
 };
