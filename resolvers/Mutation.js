@@ -41,6 +41,10 @@ async function login(parent, args, context, info) {
   }
 
   const token = jwt.sign({ userId: user.id, email: user.email }, APP_SECRET);
+  await context.models.Register.update(
+    { token: token },
+    { where: { email: user.email } }
+  );
   return {
     token,
     user,
@@ -49,25 +53,38 @@ async function login(parent, args, context, info) {
 
 //change password
 async function changepassword(parent, args, context, info) {
-  const userId = getUserId(context);
-  if (userId) {
+  const Auth = getUserId(context);
+  if (Auth) {
     if (args.newPassword && args.oldPassword) {
       throw new Error("Please enter all details");
     }
+    const userData = await context.models.Register.findOne({
+      where: { email: Auth.email },
+    });
+    const validData = await bcrypt.compare(args.oldPassword, userData.password);
+    if (!validData) {
+      throw new Error("Incorrect oldPassword");
+    }
     const user = await context.models.Register.update(
       { password: args.newPassword },
-      { where: { password: args.oldPassword } }
+      { where: { email: Auth.email } }
     );
-    if (user === null) {
-      throw new Error("No such user found");
-    }
-
-    const valid = await bcrypt.compare(args.password, user.password);
-    if (!valid) {
-      throw new Error("Invalid password");
-    }
     return {
       user,
+    };
+  }
+}
+
+//
+async function logout(parent, args, context, info) {
+  const Auth = getUserId(context);
+  if (Auth) {
+    await context.models.Register.update(
+      { token: null },
+      { where: { email: user.email } }
+    );
+    return {
+      message: "Logout successful!",
     };
   }
 }
@@ -122,6 +139,7 @@ function event(parent, args, context, info) {
 module.exports = {
   register,
   login,
+  logout,
   changepassword,
   resetpassword,
   event,
