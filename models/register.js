@@ -30,6 +30,13 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Email address already in use!",
         },
       },
+      invitedInEvents: DataTypes.ARRAY({
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+          args: true,
+        },
+      }),
       password: DataTypes.STRING,
       token: DataTypes.STRING,
     },

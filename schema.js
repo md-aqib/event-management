@@ -35,6 +35,7 @@ const typeDefs = gql`
     email: String!
     password: String!
     phone: Int!
+    invitedInEvents: [Event!]
   }
 
   type Event {
@@ -43,7 +44,7 @@ const typeDefs = gql`
     eventDetails: String!
     createdBy: String!
     date: Date!
-    invited: [Register!]!
+    invited: [Register!]
   }
 `;
 module.exports = typeDefs;
