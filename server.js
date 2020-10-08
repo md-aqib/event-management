@@ -2,15 +2,13 @@ const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
 const typeDefs = require("./schema");
 const Mutation = require("./resolvers/Mutation");
-const Event = require("./resolvers/Event");
 const Query = require("./resolvers/Query");
 const models = require("./models");
 const app = express();
 
 const resolvers = {
-  Event,
-  Query,
   Mutation,
+  Query,
 };
 
 const server = new ApolloServer({

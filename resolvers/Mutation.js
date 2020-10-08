@@ -120,7 +120,7 @@ async function resetpassword(parent, args, context, info) {
 }
 
 //add event
-function event(parent, args, context, info) {
+async function event(parent, args, context, info) {
   const Auth = getUserId(context);
   if (args.eventName && args.eventDetails && args.date) {
     const eventData = await context.models.Event.findOne({
@@ -148,11 +148,17 @@ function event(parent, args, context, info) {
 async function invite(parent, args, context, info) {
   const Auth = getUserId(context);
   if (Auth) {
-    if(!args.eventName || !args.email){
-      throw Error('Please enter all details.')
+    if (!args.eventName || !args.email) {
+      throw Error("Please enter all details.");
     }
     await context.models.Event.update(
-      {'invited': sequelize.fn('array_append', sequelize.col('invited'), args.email)},
+      {
+        invited: sequelize.fn(
+          "array_append",
+          sequelize.col("invited"),
+          args.email
+        ),
+      },
       { where: { email: args.eventName } }
     );
     return {
@@ -168,5 +174,5 @@ module.exports = {
   changepassword,
   resetpassword,
   event,
-  invite
+  invite,
 };

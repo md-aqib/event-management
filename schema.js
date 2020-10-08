@@ -3,7 +3,7 @@ const typeDefs = gql`
   scalar Date
   type Query {
     info: String!
-    feed: [Event!]!
+    events: [Event!]!
   }
 
   type Mutation {
