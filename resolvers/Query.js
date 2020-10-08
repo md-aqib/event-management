@@ -1,3 +1,6 @@
+const { APP_SECRET, getUserId } = require("../seeders/utils");
+
+//datefilter query
 const Op = require("../models").Sequelize.Op;
 async function events(parent, args, context, info) {
   if (args.startDate && args.endDate) {
@@ -19,6 +22,35 @@ async function events(parent, args, context, info) {
   }
 }
 
+//my event
+async function getMyEvent(parent, args, context, info) {
+  const Auth = getUserId(context);
+  const data = await context.models.Event.findAll({
+    where: {
+      email: Auth.email,
+    },
+  });
+  return data;
+}
+//search event
+async function getSearchedEvent(parent, args, context, info) {
+  const Auth = getUserId(context);
+  if (Auth) {
+    if (!args.searchQuery) {
+      throw Error("Please enter keyword");
+    }
+    const data = await context.models.Event.findAll({
+      where: {
+        title: { [Op.like]: "%" + searchQuery + "%" },
+        description: { [Op.like]: "%" + searchQuery2 + "%" },
+      },
+    });
+    return data;
+  }
+}
+
 module.exports = {
   events,
+  getMyEvent,
+  getSearchedEvent,
 };
