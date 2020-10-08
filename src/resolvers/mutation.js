@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const mailer = require("../nodemailer");
 const { APP_SECRET, getUserId } = require("../utils");
 
 //register
