@@ -9,9 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Event.hasMany(models.Register);
     }
   }
+  Event.associate = function (models) {
+    Event.hasMany(models.Register);
+  };
   Event.init(
     {
       // event_id: {

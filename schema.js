@@ -23,6 +23,7 @@ const typeDefs = gql`
       createdBy: String!
       date: Date!
     ): Event
+    invite(email: String!, eventName: String!): Message
   }
 
   type Message {
