@@ -1,16 +1,22 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const mailer = require("../nodemailer");
-const { APP_SECRET, getUserId } = require("../utils");
+const mailer = require("../seeders/nodemailer");
+const { APP_SECRET, getUserId } = require("../seeders/utils");
 
 //register
 async function register(parent, args, context, info) {
+  const data = await context.models.Register.findOne({
+    where: { email: args.email },
+  });
+  console.log(">>>>>>>>>>>>>>>", data);
+  if (data) {
+    throw new Error("Email is already in use.");
+  }
   const password = await bcrypt.hash(args.password, 10);
-
   const user = await context.models.Register.create({
     data: { ...args, password },
   });
-
+  console.log(">>>>>>>>>>>>>>>", user, context.models.Register);
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
   return {
@@ -65,6 +71,7 @@ async function changepassword(parent, args, context, info) {
     };
   }
 }
+
 //reset password and update password
 const generatePass = () => {
   let newPassword = "Abcd@" + Math.floor(Math.random() * 10000);
