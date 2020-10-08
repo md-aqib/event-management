@@ -16,8 +16,13 @@ const typeDefs = gql`
     login(email: String!, password: String!): AuthPayload
     changepassword(newPassword: String!, oldPassword: String!): Register
     resetpassword(email: String!): Message
-    logout(): Message
-    event(eventName: String!, eventDetails: String!, createdBy: String!, date: Date!): Event
+    logout(token: String!): Message
+    event(
+      eventName: String!
+      eventDetails: String!
+      createdBy: String!
+      date: Date!
+    ): Event
   }
 
   type Message {
