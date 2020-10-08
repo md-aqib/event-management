@@ -34,7 +34,7 @@ async function login(parent, args, context, info) {
     throw new Error("Invalid password");
   }
 
-  const token = jwt.sign({ userId: user.id }, APP_SECRET);
+  const token = jwt.sign({ userId: user.id, email: user.email }, APP_SECRET);
   return {
     token,
     user,
@@ -44,23 +44,54 @@ async function login(parent, args, context, info) {
 //change password
 async function changepassword(parent, args, context, info) {
   const userId = getUserId(context);
-  if (args.newPassword && args.oldPassword) {
+  if (userId) {
+    if (args.newPassword && args.oldPassword) {
+      throw new Error("Please enter all details");
+    }
+    const user = await context.models.Register.update(
+      { password: args.newPassword },
+      { where: { password: args.oldPassword } }
+    );
+    if (user === null) {
+      throw new Error("No such user found");
+    }
+
+    const valid = await bcrypt.compare(args.password, user.password);
+    if (!valid) {
+      throw new Error("Invalid password");
+    }
+    return {
+      user,
+    };
+  }
+}
+//reset password and update password
+const generatePass = () => {
+  let newPassword = "Abcd@" + Math.floor(Math.random() * 10000);
+  return newPassword;
+};
+async function resetpassword(parent, args, context, info) {
+  const userId = getUserId(context);
+  if (args.email) {
     throw new Error("Please enter all details");
   }
-  const user = await context.models.Register.update(
-    { password: args.newPassword },
-    { where: { password: args.oldPassword } }
-  );
-  if (user === null) {
+  const userData = await context.models.Register.findOne({
+    where: { email: args.email },
+  });
+  if (userData === null) {
     throw new Error("No such user found");
   }
-
-  const valid = await bcrypt.compare(args.password, user.password);
-  if (!valid) {
-    throw new Error("Invalid password");
-  }
+  let generatedPass = await generatePass();
+  await mailer.sendMails(
+    req.body.email,
+    `Your New Password is: ${generatedPass}, You can change your password after login.`
+  );
+  const user = await context.models.Register.update(
+    { password: generatedPass },
+    { where: { id: userId } }
+  );
   return {
-    user,
+    message: "Password updated and sent to your emailId",
   };
 }
 
@@ -85,5 +116,6 @@ module.exports = {
   register,
   login,
   changepassword,
+  resetpassword,
   event,
 };

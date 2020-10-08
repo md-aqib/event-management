@@ -13,7 +13,12 @@ type Mutation {
   ): AuthPayload
   login(email: String!, password: String!): AuthPayload
   changepassword(newPassword: String!, oldPassword: String!): Register
+  resetpassword(email: String!): Message
   event(eventName: String!, eventDetails: String!, date: Date!): Event
+}
+
+type Message {
+  message: String
 }
 
 type AuthPayload {
