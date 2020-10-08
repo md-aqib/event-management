@@ -121,19 +121,21 @@ async function resetpassword(parent, args, context, info) {
 
 //add event
 function event(parent, args, context, info) {
-  const userId = getUserId(context);
-
-  const newEvent = context.models.Event.create({
-    data: {
-      eventName: args.eventName,
-      eventDetails: args.eventDetails,
-      createdBy: args.createdBy,
-      date: args.date,
-      invited: { connect: { id: userId } },
-    },
-  });
-
-  return newEvent;
+  const Auth = getUserId(context);
+  if (args.eventName && args.eventDetails && args.date) {
+    const newEvent = context.models.Event.create({
+      data: {
+        eventName: args.eventName,
+        eventDetails: args.eventDetails,
+        createdBy: Auth.createdBy,
+        date: args.date,
+      },
+    });
+    return newEvent;
+  }
+  return {
+    message: "Please send all details",
+  };
 }
 
 module.exports = {

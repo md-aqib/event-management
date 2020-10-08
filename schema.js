@@ -17,7 +17,7 @@ const typeDefs = gql`
     changepassword(newPassword: String!, oldPassword: String!): Register
     resetpassword(email: String!): Message
     logout(): Message
-    event(eventName: String!, eventDetails: String!, date: Date!): Event
+    event(eventName: String!, eventDetails: String!, createdBy: String!, date: Date!): Event
   }
 
   type Message {
@@ -41,7 +41,7 @@ const typeDefs = gql`
     id: ID!
     eventName: String!
     eventDetails: String!
-    createdBy: Register!
+    createdBy: String!
     date: Date!
     invited: [Register!]!
   }
