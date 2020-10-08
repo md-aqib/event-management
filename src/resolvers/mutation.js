@@ -67,17 +67,17 @@ async function changepassword(parent, args, context, info) {
 function event(parent, args, context, info) {
   const userId = getUserId(context);
 
-  const newLink = context.models.Event.create({
+  const newEvent = context.models.Event.create({
     data: {
       eventName: args.eventName,
       eventDetails: args.eventDetails,
       createdBy: args.createdBy,
       date: args.date,
-      invite: { connect: { id: userId } },
+      invited: { connect: { id: userId } },
     },
   });
 
-  return newLink;
+  return newEvent;
 }
 
 module.exports = {

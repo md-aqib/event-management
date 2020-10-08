@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   Register.init(
     {
-      user_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
+      // user_id: {
+      //   type: DataTypes.INTEGER,
+      //   primaryKey: true,
+      //   autoIncrement: true,
+      // },
       name: DataTypes.STRING,
       phone: DataTypes.INTEGER,
       email: {

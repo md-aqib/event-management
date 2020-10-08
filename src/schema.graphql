@@ -1,3 +1,4 @@
+scalar Date
 type Query {
   info: String!
   feed: [Event!]!
@@ -11,8 +12,8 @@ type Mutation {
     phone: Int
   ): AuthPayload
   login(email: String!, password: String!): AuthPayload
-  changepassword(newPassword: String!, oldPassword: !String)
-  event(eventName: String!, eventDetails: String!, date: Date): Event!
+  changepassword(newPassword: String!, oldPassword: String!): Register
+  event(eventName: String!, eventDetails: String!, date: Date!): Event
 }
 
 type AuthPayload {
@@ -33,6 +34,6 @@ type Event {
   eventName: String!
   eventDetails: String!
   createdBy: Register!
-  date: Date
-  invite: [Register!]!
+  date: Date!
+  invited: [Register!]!
 }
