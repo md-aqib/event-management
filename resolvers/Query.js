@@ -7,7 +7,7 @@ async function events(parent, args, context, info) {
     const events = await context.models.Event.findAll({
       attributes: [],
       where: {
-        createdAt: {
+        date: {
           [Op.between]: [startDate, endDate],
         },
       },
