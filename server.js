@@ -1,5 +1,5 @@
-const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
+const express = require("express");
 const typeDefs = require("./schema");
 const Mutation = require("./resolvers/Mutation");
 const Query = require("./resolvers/Query");
