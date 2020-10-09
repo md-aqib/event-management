@@ -13,7 +13,9 @@ async function events(parent, args, context, info) {
       },
       logging: console.log,
       raw: true,
-      order: [["createdAt", "ASC"]],
+      order: [
+        ['date', 'DESC'],
+    ],
       // limit: count,
     });
     return events;
@@ -29,6 +31,9 @@ async function getMyEvent(parent, args, context, info) {
     where: {
       email: Auth.email,
     },
+    order: [
+      ['date', 'DESC'],
+  ]
   });
   return data;
 }
@@ -43,6 +48,9 @@ async function getSearchedEvent(parent, args, context, info) {
       where: {
         eventName: { [Op.like]: "%" + searchQuery + "%" },
       },
+      order: [
+        ['date', 'DESC'],
+    ]
     });
     return data;
   }
@@ -55,6 +63,9 @@ async function checkInvitation(parent, args, context, info) {
     where: {
       invited: { [Op.contains]: [Auth.email] },
     },
+    order: [
+      ['date', 'DESC'],
+  ]
   });
   return data;
 }
