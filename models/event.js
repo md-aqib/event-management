@@ -11,16 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Event.associate = function (models) {
-    Event.hasMany(models.Register);
-  };
+  // Event.associate = function (models) {
+  //   Event.hasMany(models.Register);
+  // };
   Event.init(
     {
-      // event_id: {
-      //   type: DataTypes.INTEGER,
-      //   primaryKey: true,
-      //   autoIncrement: true,
-      // },
       eventName: {
         type: DataTypes.STRING,
         unique: {

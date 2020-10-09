@@ -11,16 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Register.associate = function (models) {
-    Register.belongsTo(models.Event);
-  };
+  // Register.associate = function (models) {
+  //   Register.belongsTo(models.Event);
+  // };
   Register.init(
     {
-      // user_id: {
-      //   type: DataTypes.INTEGER,
-      //   primaryKey: true,
-      //   autoIncrement: true,
-      // },
       name: DataTypes.STRING,
       phone: DataTypes.INTEGER,
       email: {
@@ -33,13 +28,6 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Email address already in use!",
         },
       },
-      invitedInEvents: DataTypes.ARRAY({
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: {
-          args: true,
-        },
-      }),
       password: DataTypes.STRING,
       token: DataTypes.STRING,
     },
