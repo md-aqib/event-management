@@ -19,11 +19,10 @@ const typeDefs = gql`
     login(email: String!, password: String!): AuthPayload
     changepassword(newPassword: String!, oldPassword: String!): Message
     resetpassword(email: String!): Message
-    logout(token: String!): Message
-    event(
+    logout: Message
+    addevent(
       eventName: String!
       eventDetails: String!
-      createdBy: String!
       date: Date!
     ): Event
     invite(email: String!, eventName: String!): Message

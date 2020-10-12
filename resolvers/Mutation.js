@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mailer = require("../seeders/nodemailer");
 const { APP_SECRET, getUserId } = require("../seeders/utils");
+const { Op } = require('sequelize');
 // const APP_SECRET = "GraphQL-is-aw3some";
 
 //register
@@ -75,15 +76,13 @@ async function changepassword(parent, args, context, info) {
 //logout
 async function logout(parent, args, context, info) {
   const Auth = getUserId(context);
-  if (Auth) {
     await context.models.Register.update(
       { token: null },
-      { where: { email: user.email } }
+      { where: { email: Auth.email } }
     );
     return {
       message: "Logout successful!",
     };
-  }
 }
 
 //reset password and update password
@@ -92,24 +91,21 @@ const generatePass = () => {
   return newPassword;
 };
 async function resetpassword(parent, args, context, info) {
-  const userId = getUserId(context);
-  if (args.email) {
-    throw new Error("Please enter all details");
-  }
   const userData = await context.models.Register.findOne({
     where: { email: args.email },
   });
-  if (userData === null) {
+  if (!userData) {
     throw new Error("No such user found");
   }
   let generatedPass = await generatePass();
   await mailer.sendMails(
-    req.body.email,
+    args.email,
     `Your New Password is: ${generatedPass}, You can change your password after login.`
   );
+  const password = await bcrypt.hash(generatedPass, 10);
   const user = await context.models.Register.update(
-    { password: generatedPass },
-    { where: { id: userId } }
+    { password: password },
+    { where: { email: args.email } }
   );
   return {
     message: "Password updated and sent to your emailId",
@@ -117,9 +113,8 @@ async function resetpassword(parent, args, context, info) {
 }
 
 //add event
-async function event(parent, args, context, info) {
+async function addevent(parent, args, context, info) {
   const Auth = getUserId(context);
-  if (args.eventName && args.eventDetails && args.date) {
     const eventData = await context.models.Event.findOne({
       where: { eventName: args.eventName },
     });
@@ -127,27 +122,29 @@ async function event(parent, args, context, info) {
       throw new Error("Event Already created");
     }
     const newEvent = context.models.Event.create({
-      data: {
         eventName: args.eventName,
         eventDetails: args.eventDetails,
-        createdBy: Auth.createdBy,
+        createdBy: Auth.email,
         date: args.date,
-      },
     });
     return newEvent;
-  }
-  return {
-    message: "Please send all details",
-  };
 }
 
 //add invite
 async function invite(parent, args, context, info) {
   const Auth = getUserId(context);
-  if (Auth) {
-    if (!args.eventName || !args.email) {
-      throw Error("Please enter all details.");
-    }
+  const user = await context.models.Register.findOne({
+    where: { email: args.email },
+  });
+  if (user === null) {
+    throw new Error("No such user found");
+  }
+  const inviteData = await context.models.Event.findOne({
+    invited: { [Op.contains]: [args.email] },
+  });
+  if(inviteData){
+    throw Error("Already invited")
+  }
     await context.models.Event.update(
       {
         invited: sequelize.fn(
@@ -161,7 +158,6 @@ async function invite(parent, args, context, info) {
     return {
       message: "Invited successful!",
     };
-  }
 }
 
 module.exports = {
@@ -170,6 +166,6 @@ module.exports = {
   logout,
   changepassword,
   resetpassword,
-  event,
+  addevent,
   invite,
 };
