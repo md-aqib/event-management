@@ -3,10 +3,10 @@ const typeDefs = gql`
   scalar Date
   type Query {
     info: String!
-    events: [Event!]
-    getMyEvent: [Event!]
-    getSearchedEvent(searchQuery: String!): [Event!]
-    checkInvitation: [Event!]
+    events(startDate: String!, endDate: String!): [Event]
+    getMyEvent: [Event]
+    getSearchedEvent(searchQuery: String!): [Event]
+    checkInvitation: [Event]
   }
 
   type Mutation {

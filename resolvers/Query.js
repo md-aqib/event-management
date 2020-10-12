@@ -3,25 +3,21 @@ const { APP_SECRET, getUserId } = require("../seeders/utils");
 //datefilter query
 const Op = require("../models").Sequelize.Op;
 async function events(parent, args, context, info) {
-  if (args.startDate && args.endDate) {
+  const Auth = getUserId(context);
     const events = await context.models.Event.findAll({
-      attributes: [],
       where: {
         date: {
-          [Op.between]: [startDate, endDate],
+          [Op.between]: [args.startDate, args.endDate],
         },
       },
-      logging: console.log,
-      raw: true,
       order: [
         ['date', 'DESC'],
     ],
-      // limit: count,
     });
+    if(events.length === 0){
+      throw Error("No event found")
+    }
     return events;
-  } else {
-    throw Error("Please enter all details");
-  }
 }
 
 //my event
@@ -29,31 +25,33 @@ async function getMyEvent(parent, args, context, info) {
   const Auth = getUserId(context);
   const data = await context.models.Event.findAll({
     where: {
-      email: Auth.email,
+      createdBy: Auth.email,
     },
     order: [
       ['date', 'DESC'],
   ]
   });
+  if(data.length === 0){
+    throw Error("No data found")
+  }
   return data;
 }
+
 //search event
 async function getSearchedEvent(parent, args, context, info) {
   const Auth = getUserId(context);
-  if (Auth) {
-    if (!args.searchQuery) {
-      throw Error("Please enter keyword");
-    }
     const data = await context.models.Event.findAll({
       where: {
-        eventName: { [Op.like]: "%" + searchQuery + "%" },
+        eventName: { [Op.like]: "%" + args.searchQuery + "%" },
       },
       order: [
         ['date', 'DESC'],
     ]
     });
+    if(data.length === 0){
+      throw Error("No search data found")
+    }
     return data;
-  }
 }
 
 //checkinvitation
