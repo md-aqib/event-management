@@ -2,9 +2,11 @@ const jwt = require("jsonwebtoken");
 const APP_SECRET = "GraphQL-is-aw3some";
 
 function getUserId(context) {
-  const Authorization = context.request.get("Authorization");
-  if (Authorization) {
-    const token = Authorization.replace("Bearer ", "");
+  const token = context.req.headers.authorization
+  console.log('>>>>>>>>>>>????>>',token)
+  // const Authorization = context.request.get("authorization");
+  if (token) {
+    // const token = Authorization.replace("Bearer ", "");
     const { userId, email } = jwt.verify(token, APP_SECRET);
     return { userId, email };
   }

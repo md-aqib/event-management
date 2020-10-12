@@ -1,9 +1,10 @@
-const { ApolloServer } = require("apollo-server-express");
+const { ApolloServer } = require("apollo-server");
 const express = require("express");
 const typeDefs = require("./schema");
 const Mutation = require("./resolvers/Mutation");
 const Query = require("./resolvers/Query");
 const models = require("./models");
+const jwt = require('express-jwt')
 const app = express();
 
 const resolvers = {
@@ -14,19 +15,20 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: (request) => {
+  context: ({ req }) => {
+    // const token = req.headers.authorization;
+    // console.log('LLLLLLLLLLLLLL',token)
+    // const user = getUser(token);
     return {
-      ...request,
+      req,
       models,
     };
   },
 });
 
-server.applyMiddleware({ app });
+// models.sequelize.authenticate();
+// models.sequelize.sync();
 
-models.sequelize.authenticate();
-models.sequelize.sync();
-
-app.listen({ port: 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}ql`)
-);
+server.listen().then(({ url }) => {
+  console.log(`🚀 Server ready at ${url}`);
+});

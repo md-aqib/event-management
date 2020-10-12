@@ -17,7 +17,7 @@ const typeDefs = gql`
       phone: Int
     ): AuthPayload
     login(email: String!, password: String!): AuthPayload
-    changepassword(newPassword: String!, oldPassword: String!): Register
+    changepassword(newPassword: String!, oldPassword: String!): Message
     resetpassword(email: String!): Message
     logout(token: String!): Message
     event(
@@ -44,6 +44,7 @@ const typeDefs = gql`
     email: String!
     password: String!
     phone: Int!
+    token: String!
     invitedInEvents: [Event!]
   }
 

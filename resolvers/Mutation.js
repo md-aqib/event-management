@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mailer = require("../seeders/nodemailer");
 const { APP_SECRET, getUserId } = require("../seeders/utils");
+// const APP_SECRET = "GraphQL-is-aw3some";
 
 //register
 async function register(parent, args, context, info) {
@@ -18,8 +19,7 @@ async function register(parent, args, context, info) {
     password: password,
     phone: args.phone
   });
-  const token = jwt.sign({ userId: user.id }, APP_SECRET);
-
+  const token = jwt.sign({ userId: user.id, email: user.email }, APP_SECRET);
   return {
     token,
     user,
@@ -54,25 +54,22 @@ async function login(parent, args, context, info) {
 //change password
 async function changepassword(parent, args, context, info) {
   const Auth = getUserId(context);
-  if (Auth) {
-    if (args.newPassword && args.oldPassword) {
-      throw new Error("Please enter all details");
-    }
     const userData = await context.models.Register.findOne({
       where: { email: Auth.email },
     });
+    
     const validData = await bcrypt.compare(args.oldPassword, userData.password);
     if (!validData) {
       throw new Error("Incorrect oldPassword");
     }
+    const password = await bcrypt.hash(args.newPassword, 10);
     const user = await context.models.Register.update(
-      { password: args.newPassword },
+      { password: password },
       { where: { email: Auth.email } }
     );
     return {
-      user,
+      message: "Password updated",
     };
-  }
 }
 
 //logout
