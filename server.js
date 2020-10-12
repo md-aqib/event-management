@@ -7,8 +7,8 @@ const models = require("./models");
 const app = express();
 
 const resolvers = {
-  Mutation,
-  Query,
+  Query: Query,
+  Mutation: Mutation,
 };
 
 const server = new ApolloServer({

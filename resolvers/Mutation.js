@@ -8,15 +8,16 @@ async function register(parent, args, context, info) {
   const data = await context.models.Register.findOne({
     where: { email: args.email },
   });
-  console.log(">>>>>>>>>>>>>>>", data);
   if (data) {
     throw new Error("Email is already in use.");
   }
   const password = await bcrypt.hash(args.password, 10);
   const user = await context.models.Register.create({
-    data: { ...args, password },
+    name: args.name,
+    email: args.email,
+    password: password,
+    phone: args.phone
   });
-  console.log(">>>>>>>>>>>>>>>", user, context.models.Register);
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
   return {
@@ -30,7 +31,6 @@ async function login(parent, args, context, info) {
   const user = await context.models.Register.findOne({
     where: { email: args.email },
   });
-  console.log(">>>>>>>>>>>>>>>", user);
   if (user === null) {
     throw new Error("No such user found");
   }
@@ -75,7 +75,7 @@ async function changepassword(parent, args, context, info) {
   }
 }
 
-//
+//logout
 async function logout(parent, args, context, info) {
   const Auth = getUserId(context);
   if (Auth) {
