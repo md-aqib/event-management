@@ -2,8 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mailer = require("../seeders/nodemailer");
 const { APP_SECRET, getUserId } = require("../seeders/utils");
-const { Op } = require('sequelize');
-// const APP_SECRET = "GraphQL-is-aw3some";
+var sequelize = require('sequelize');
 
 //register
 async function register(parent, args, context, info) {
@@ -126,6 +125,7 @@ async function addevent(parent, args, context, info) {
         eventDetails: args.eventDetails,
         createdBy: Auth.email,
         date: args.date,
+        invited: []
     });
     return newEvent;
 }
@@ -136,16 +136,21 @@ async function invite(parent, args, context, info) {
   const user = await context.models.Register.findOne({
     where: { email: args.email },
   });
-  if (user === null) {
+  if (!user) {
     throw new Error("No such user found");
   }
   const inviteData = await context.models.Event.findOne({
-    invited: { [Op.contains]: [args.email] },
+    where: { eventName: args.eventName }
   });
-  if(inviteData){
-    throw Error("Already invited")
+
+  if(inviteData.invited !== null){
+  let invite = inviteData.invited.includes(args.email)
+    if(invite){
+      throw Error("Already invited")
+    }
   }
-    await context.models.Event.update(
+
+  await context.models.Event.update(
       {
         invited: sequelize.fn(
           "array_append",
@@ -153,7 +158,7 @@ async function invite(parent, args, context, info) {
           args.email
         ),
       },
-      { where: { email: args.eventName } }
+      { where: { eventName: args.eventName } }
     );
     return {
       message: "Invited successful!",

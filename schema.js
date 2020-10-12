@@ -53,7 +53,7 @@ const typeDefs = gql`
     eventDetails: String!
     createdBy: String!
     date: Date!
-    invited: [Register!]
+    invited: [String!]
   }
 `;
 module.exports = typeDefs;
