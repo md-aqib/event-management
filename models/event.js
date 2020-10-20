@@ -9,11 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Event.belongsToMany(models.Register, {through: 'eventsuser', foreignKey: 'UserId', as: 'invitees'})
     }
   }
-  // Event.associate = function (models) {
-  //   Event.hasMany(models.Register);
-  // };
   Event.init(
     {
       eventName: {
