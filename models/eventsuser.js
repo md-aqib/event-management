@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      eventsuser.belongsTo(models.Register, {foreignKey: 'UserId'})
-      eventsuser.belongsTo(models.Event, {foreignKey: 'EventId'})
+      eventsuser.belongsTo(models.Register, { foreignKey: 'UserId' })
+      eventsuser.belongsTo(models.Event, { foreignKey: 'EventId' })
     }
   };
   eventsuser.init({

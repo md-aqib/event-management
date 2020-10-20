@@ -9,14 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Register.belongsToMany(models.Event, {through: 'eventsuser', foreignKey: 'EventId', as: 'Events'})
+      Register.belongsToMany(models.Event, { through: 'eventsuser', foreignKey: 'EventId', as: 'Events' })
     }
   }
   Register.init(
     {
       name: DataTypes.STRING,
       phone: DataTypes.INTEGER,
-      eventId: DataTypes.STRING,
       email: {
         type: DataTypes.STRING,
         validate: {
