@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Event.belongsToMany(models.Register, { through: 'eventsuser', sourceKey: 'invited', foreignKey: 'UserId', as: 'invitees' })
-      Event.belongsTo(models.Register, { targetKey: 'id', foreignKey: 'createdBy' });
+      Event.belongsToMany(models.Register, { through: 'eventsuser', foreignKey: 'UserId', as: 'invitees' })
+      // Event.belongsTo(models.Register, { foreignKey: 'createdBy' });
     }
   }
   Event.init(
@@ -24,17 +24,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       eventDetails: DataTypes.STRING,
       createdBy: DataTypes.STRING,
-      invited: DataTypes.ARRAY({
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          isEmail: true,
-        },
-        unique: {
-          args: true,
-          msg: "Email address already invited!",
-        },
-      }),
       date: DataTypes.DATE,
     },
     {

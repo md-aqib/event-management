@@ -1,6 +1,6 @@
 {
   "development": {
-    "use_env_variable": "postgres://postgres:abc1122@localhost:5433/event_data"
+    "use_env_variable": "postgres://postgres:postgres@localhost:5432/event_data"
   },
   "test": {
     "username": "usr1",
