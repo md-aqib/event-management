@@ -2,7 +2,7 @@ require('dotenv').config()
 
 module.exports = {
   "development": {
-    // "use_env_variable": process.env.DB_URL,
+    "use_env_variable": process.env.DB_URL,
     "username": process.env.USERNAME,
     "password": process.env.PASSWORD,
     "database": process.env.DB,
