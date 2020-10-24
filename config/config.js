@@ -1,6 +1,8 @@
-{
+require('dotenv').config()
+
+module.exports = {
   "development": {
-    "use_env_variable": "postgres://postgres:postgres@localhost:5432/event_data"
+    "use_env_variable": process.env.DB_URL
   },
   "test": {
     "username": "usr1",
