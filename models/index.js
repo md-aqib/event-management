@@ -12,12 +12,10 @@ let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(config.use_env_variable, config);
 } else {
-  sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config
-  );
+  sequelize = new Sequelize(config.database, config.username, config.password, {
+      host: process.env.HOST,
+      dialect: process.env.DIALECT
+    });
 }
 
 fs.readdirSync(__dirname)
