@@ -1,12 +1,15 @@
 const { gql } = require("apollo-server");
 const typeDefs = gql`
+  directive @lower on FIELD_DEFINITION
   scalar Date
+
   type Query {
     info: String!
     events(startDate: String!, endDate: String!): [Event]
     getMyEvent: [Event]
     getSearchedEvent(searchQuery: String!): [Event]
     checkInvitation: [Event]
+    users: [Register]
   }
 
   type Mutation {
@@ -39,7 +42,7 @@ const typeDefs = gql`
 
   type Register {
     id: ID!
-    name: String!
+    name: String! @lower
     email: String!
     password: String!
     phone: Int!

@@ -68,9 +68,18 @@ async function checkInvitation(parent, args, context, info) {
   return data;
 }
 
+//users
+async function users(parent, args, context, info) {
+  // const Auth = getUserId(context);
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',context.models.Register)
+  const data = await context.models.Register.findAll();
+  return data;
+}
+
 module.exports = {
   events,
   getMyEvent,
   getSearchedEvent,
   checkInvitation,
+  users
 };

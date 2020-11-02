@@ -3,6 +3,7 @@ const typeDefs = require("./schema");
 const Mutation = require("./resolvers/Mutation");
 const Query = require("./resolvers/Query");
 const models = require("./models");
+const schemaDirectives = require('./directives/index')
 
 
 const resolvers = {
@@ -13,6 +14,7 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  schemaDirectives,
   context: ({ req }) => {
     return {
       req,

@@ -1,4 +1,4 @@
-const models  = require('./models')
+const models  = require('./models').Register
 const User = models.Register;
 
 
@@ -21,7 +21,7 @@ const User = models.Register;
         //   ]);
         //   console.log('done')
 
-    const captains = await User.findAll({})
+    const captains = await models.findAll({})
     console.log(captains)
     } catch(e) {
         console.log('>>>>>>>>>>>>>>>>>>>>>',e)
