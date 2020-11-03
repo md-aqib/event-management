@@ -1,3 +1,4 @@
+const { getUser } = require("../seeders/utils");
 //datefilter query
 const Op = require("../models").Sequelize.Op;
 async function events(parent, args, context, info) {
@@ -19,6 +20,7 @@ async function events(parent, args, context, info) {
 
 //my event
 async function getMyEvent(parent, args, context, info) {
+  const Auth = getUser(context);
   const data = await context.models.Event.findAll({
     where: {
       createdBy: Auth.email,
@@ -51,6 +53,7 @@ async function getSearchedEvent(parent, args, context, info) {
 
 //checkinvitation
 async function checkInvitation(parent, args, context, info) {
+  const Auth = getUser(context);
   const data = await context.models.Event.findAll({
     where: {
       invited: { [Op.contains]: [Auth.email] },
@@ -64,8 +67,6 @@ async function checkInvitation(parent, args, context, info) {
 
 //users
 async function users(parent, args, context, info) {
-  // const Auth = getUserId(context);
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',context.models.Register)
   const data = await context.models.Register.findAll();
   return data;
 }
