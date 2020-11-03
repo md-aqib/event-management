@@ -1,20 +1,19 @@
 const { SchemaDirectiveVisitor } = require('apollo-server');
 const { defaultFieldResolver } = require('graphql');
+const { getUser } = require('../seeders/utils')
 
-class LowerCaseDirective extends SchemaDirectiveVisitor {
+class AuthDirective extends SchemaDirectiveVisitor {
     visitFieldDefinition(field) {
       const { resolve = defaultFieldResolver } = field;
       field.resolve = async function (...args) {
-        const result = await resolve.apply(this, args);
-        console.log(field)
-        if (typeof result === 'string') {
-          return result.toLowerCase();
-        }
-        return result;
+
+        getUser(context);
+        
+        return resolve.apply(this, args);
       };
     }
   }
 
   module.exports = {
-    LowerCaseDirective
+    AuthDirective
   }

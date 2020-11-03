@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mailer = require("../seeders/nodemailer");
-const { APP_SECRET, getUserId } = require("../seeders/utils");
+const { APP_SECRET } = require("../seeders/utils");
 var sequelize = require('sequelize');
 
 //register
@@ -53,7 +53,6 @@ async function login(parent, args, context, info) {
 
 //change password
 async function changepassword(parent, args, context, info) {
-  const Auth = getUserId(context);
     const userData = await context.models.Register.findOne({
       where: { email: Auth.email },
     });
@@ -74,7 +73,6 @@ async function changepassword(parent, args, context, info) {
 
 //logout
 async function logout(parent, args, context, info) {
-  const Auth = getUserId(context);
     await context.models.Register.update(
       { token: null },
       { where: { email: Auth.email } }
@@ -113,7 +111,6 @@ async function resetpassword(parent, args, context, info) {
 
 //add event
 async function addevent(parent, args, context, info) {
-  const Auth = getUserId(context);
     const eventData = await context.models.Event.findOne({
       where: { eventName: args.eventName },
     });
@@ -132,7 +129,6 @@ async function addevent(parent, args, context, info) {
 
 //add invite
 async function invite(parent, args, context, info) {
-  const Auth = getUserId(context);
   const user = await context.models.Register.findOne({
     where: { email: args.email },
   });
